@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" type="image/png" sizes="32x32" href="images/WhatsApp Image 2026-04-16 at 11.35.03.JPG">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/WhatsApp Image 2026-04-16 at 15.39.08.jpeg">
 <base target="_blank">
 </head>
 <body>
@@ -41,7 +41,7 @@
         <div class="hero-content">
             <div class="hero-text">
                 <h1>MUHAMMAD <span>AQIB</span></h1>
-                <p class="subtitle">Electrical Technologist & Innovation Researcher</p>
+                <p class="subtitle">CEO of Softskills Engineering</p>
                 <p>Transforming ideas into reality through cutting-edge electrical engineering, robotics, and automation technologies. Passionate about creating sustainable solutions for tomorrow's challenges.</p>
                 <div class="hero-buttons">
                     <a href="#contact" class="btn btn-primary">
@@ -403,14 +403,14 @@
                     <a href="tel:+923477335802" class="contact-link">
                         <i class="fas fa-phone"></i>
                         <div>
-                            <div style="font-weight: 600;">Phone</div>
+                            <div style="font-weight: 600;">WhatsApp</div>
                             <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">+92 347 7335802</div>
                         </div>
                     </a>
                     <a href="tel:+923109014245" class="contact-link">
                         <i class="fas fa-mobile-alt"></i>
                         <div>
-                            <div style="font-weight: 600;">Alternate</div>
+                            <div style="font-weight: 600;">Phone</div>
                             <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">+92 310 9014245</div>
                         </div>
                     </a>
@@ -423,7 +423,7 @@
                     </a>
                 </div>
             </div>
-            <div class="contact-form reveal">
+            <!-- <div class="contact-form reveal">
                 <form id="contactForm">
                     <div class="form-group">
                         <label for="name">Your Name</label>
@@ -441,7 +441,45 @@
                         <i class="fas fa-paper-plane"></i> Send Message
                     </button>
                 </form>
+            </div> -->
+            <div class="exact-card">
+    <div class="card-header">
+        <div class="badge-target">
+            <!-- <i class="fas fa-envelope-open-text"></i> Notification target:  -->
+            <!-- <strong style="color:#0b5e7e;">mustafaaqib892@gmail.com</strong> -->
+        </div>
+        <h2>
+            <i class="fas fa-user-edit" style="font-size: 1.4rem;"></i> 
+            User Information
+        </h2>
+        <div class="sub-line">Fill details → instant alert to target Gmail</div>
+    </div>
+    <div class="form-body">
+        <form id="userInfoForm">
+            <div class="input-row">
+                <label><i class="fas fa-user"></i> Full Name *</label>
+                <input type="text" id="fullName" placeholder="Enter your name" autocomplete="off" required>
             </div>
+            <div class="input-row">
+                <label><i class="fas fa-envelope"></i> User's Email (optional)</label>
+                <input type="email" id="userEmail" placeholder="Enter your gmail(for reference)">
+            </div>
+            <div class="input-row">
+                <label><i class="fas fa-comment"></i> Message / Information *</label>
+                <textarea id="infoMsg" placeholder="Write inquiry, feedback or details..."></textarea>
+            </div>
+            <button type="submit" class="btn-submit" id="sendBtn">
+                <i class="fas fa-bell"></i> Send Notification to Gmail
+            </button>
+        </form>
+        <!-- <div id="statusMessage" class="status-area">
+            📌 User info will be delivered to mustafaaqib892@gmail.com
+        </div> -->
+        <div class="footer-note">
+            <i class="fas fa-shield-alt"></i> Secure | Instant email alert on submission
+        </div>
+    </div>
+</div>
         </div>
     </section>
 
@@ -456,7 +494,7 @@
                 <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
                 <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
             </div>
-            <p class="copyright">© 2024 Muhammad Aqib. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--secondary);"></i> and Innovation</p>
+            <p class="copyright">© 2026 Muhammad Aqib. All rights reserved. <i class="fas fa-heart" style="color: var(--secondary);"></i> </p>
         </div>
     </footer>
 
@@ -741,6 +779,167 @@
                 animateParticles();
             }
         });
+            // ===============================================================
+    // 🔥 EMAILJS CONFIGURATION - REPLACE WITH YOUR REAL KEYS 🔥
+    // ===============================================================
+    // To make emails actually reach mustafaaqib892@gmail.com:
+    // 1. Sign up at https://www.emailjs.com/
+    // 2. Create Email Service (connect Gmail) -> copy SERVICE ID
+    // 3. Create Template with variables: {{user_fullname}}, {{user_contact_email}}, {{user_message}}, {{full_details}}
+    // 4. Copy Public Key (API Key) from Account
+    // ===============================================================
+    const EMAILJS_PUBLIC_KEY = "YOUR_EMAILJS_PUBLIC_KEY";     // replace with actual public key
+    const EMAILJS_SERVICE_ID = "service_YOUR_SERVICE_ID";     // replace with your service ID
+    const EMAILJS_TEMPLATE_ID = "template_YOUR_TEMPLATE_ID";  // replace with your template ID
+    
+    const TARGET_EMAIL = "mustafaaqib892@gmail.com";
+    let emailJsReady = false;
+    
+    function initEmailJS() {
+        if (EMAILJS_PUBLIC_KEY && EMAILJS_PUBLIC_KEY !== "YOUR_EMAILJS_PUBLIC_KEY") {
+            emailjs.init(EMAILJS_PUBLIC_KEY);
+            emailJsReady = true;
+            console.log("✅ EmailJS ready");
+        } else {
+            emailJsReady = false;
+            console.warn("⚠️ EmailJS placeholders detected.");
+        }
+    }
+    initEmailJS();
+    
+    const statusDiv = document.getElementById('statusMessage');
+    const form = document.getElementById('userInfoForm');
+    const submitBtn = document.getElementById('sendBtn');
+    
+    function setStatus(msg, isError = false, isSuccess = false) {
+        statusDiv.innerHTML = msg;
+        if (isError) {
+            statusDiv.className = "status-area error";
+        } else if (isSuccess) {
+            statusDiv.className = "status-area success";
+        } else {
+            statusDiv.className = "status-area";
+        }
+    }
+    
+    function setLoading(loading) {
+        if (loading) {
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Sending...';
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = "0.7";
+        } else {
+            submitBtn.innerHTML = '<i class="fas fa-bell"></i> Send Notification to Gmail';
+            submitBtn.disabled = false;
+            submitBtn.style.opacity = "1";
+        }
+    }
+    
+    async function sendToTargetGmail(userName, userEmail, userMessage) {
+        if (!emailJsReady) {
+            throw new Error("EmailJS credentials missing. Please replace the placeholder keys (PUBLIC_KEY, SERVICE_ID, TEMPLATE_ID) with real ones from EmailJS.com");
+        }
+        
+        const timestamp = new Date().toLocaleString('en-PK', { hour12: true });
+        const fullDetails = `
+📢 USER INFORMATION SUBMITTED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+👤 Full Name       : ${userName || "—"}
+📧 User Email      : ${userEmail || "—"}
+💬 Message         : 
+${userMessage || "No additional message"}
+
+🕒 Timestamp       : ${timestamp}
+🌐 Submitted via   : Web Form (mustafaaqib892)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Notification sent to target Gmail.
+        `.trim();
+        
+        const templateParams = {
+            target_email: TARGET_EMAIL,
+            user_fullname: userName,
+            user_contact_email: userEmail || "Not provided",
+            user_message: userMessage || "—",
+            full_details: fullDetails,
+            reply_to: userEmail || TARGET_EMAIL,
+            to_name: "Mustafaaqib",
+        };
+        
+        const response = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+        return response;
+    }
+    
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const fullName = document.getElementById('fullName').value.trim();
+        const userEmail = document.getElementById('userEmail').value.trim();
+        const infoMsg = document.getElementById('infoMsg').value.trim();
+        
+        if (!fullName) {
+            setStatus("❌ Please enter the user's full name.", true);
+            document.getElementById('fullName').focus();
+            return;
+        }
+        
+        if (userEmail !== "") {
+            const emailRegex = /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/;
+            if (!emailRegex.test(userEmail)) {
+                setStatus("⚠️ Please enter a valid user email (optional but fix if provided).", true);
+                document.getElementById('userEmail').focus();
+                return;
+            }
+        }
+        
+        setStatus("📧 Sending notification to mustafaaqib892@gmail.com ...");
+        setLoading(true);
+        
+        try {
+            await sendToTargetGmail(fullName, userEmail, infoMsg);
+            setStatus(`✅ Success! User information sent to ${TARGET_EMAIL}. Full details delivered.`, false, true);
+            form.reset();
+            setTimeout(() => {
+                setStatus("✨ Ready for new submission — data will go to mustafaaqib892@gmail.com", false);
+            }, 2800);
+        } catch (err) {
+            console.error(err);
+            let errorMsg = `❌ Failed to send to ${TARGET_EMAIL}. `;
+            if (!emailJsReady) {
+                errorMsg += `EmailJS not configured. Replace the three keys (public, service, template) with valid credentials from EmailJS.`;
+            } else {
+                errorMsg += `Error: ${err.message || "Check service/template ID"}. Ensure template variables match.`;
+            }
+            setStatus(errorMsg, true);
+        } finally {
+            setLoading(false);
+        }
+    });
+    
+    // show warning if not configured
+    window.addEventListener('DOMContentLoaded', () => {
+        if (!emailJsReady) {
+            setStatus("⚠️ EmailJS setup required: Replace placeholder keys (PUBLIC_KEY, SERVICE_ID, TEMPLATE_ID) to enable real email delivery to mustafaaqib892@gmail.com. See instructions inside code.", true);
+        } else {
+            console.log("✅ system ready: user info -> mustafaaqib892@gmail.com");
+        }
+    });
+</script>
+
+<!-- 
+    =======================================================
+    🔥 EXACT SIZE MATCHES ORIGINAL IMAGE (width ~540px, compact card, height auto similar to UI)
+    ✅ The width & height are exactly as per the original pic — no extra spacing.
+    ✅ Target: mustafaaqib892@gmail.com gets full user info.
+    ✅ EmailJS based (frontend). Just replace the three keys.
+    
+    HOW TO ACTIVATE (simple):
+    1. EmailJS.com signup
+    2. Create Service (Gmail) -> get SERVICE_ID
+    3. Create Template with variables: {{user_fullname}}, {{user_contact_email}}, {{user_message}}, {{full_details}}
+    4. Copy Public Key
+    5. Paste them in the code (LINE ~160-162)
+    6. Done — every form submission sends user data to mustafaaqib892@gmail.com
+=======================================================
+-->
     </script>
 </body>
 </html>
