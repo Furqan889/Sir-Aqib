@@ -21,7 +21,7 @@ module.exports = async function handler(req, res) {
       // This sender works for testing on Resend without a verified domain.
       // When you verify your own domain in Resend, replace with e.g. "Contact <hello@yourdomain.com>".
       from: 'Contact Form <onboarding@resend.dev>',
-      to: ['mustafaaqib892@gmail.com'],
+      to: ['rfurqan009@gmail.com'],
       subject: `New message from ${fullName}`,
       replyTo: userEmail || undefined,
       html: `
