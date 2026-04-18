@@ -478,18 +478,21 @@
                     <div class="sub-line">Fill details → instant alert to target Gmail</div>
                 </div>
                 <div class="form-body">
-                    <form id="userInfoForm" action="email.php" method="post">
+                    <form id="userInfoForm" method="post">
                         <div class="input-row">
                             <label><i class="fas fa-user"></i> Full Name *</label>
-                            <input type="text" name="fullName" id="fullName" placeholder="Enter your name" autocomplete="off" required>
+                            <input type="text" name="fullName" id="fullName" placeholder="Enter your name"
+                                autocomplete="off" required>
                         </div>
                         <div class="input-row">
                             <label><i class="fas fa-envelope"></i> User's Email (optional)</label>
-                            <input type="email" name="userEmail" id="userEmail" placeholder="Enter your gmail(for reference)">
+                            <input type="email" name="userEmail" id="userEmail"
+                                placeholder="Enter your gmail(for reference)">
                         </div>
                         <div class="input-row">
                             <label><i class="fas fa-comment"></i> Message / Information *</label>
-                            <textarea name="infoMsg" id="infoMsg" placeholder="Write inquiry, feedback or details..."></textarea>
+                            <textarea name="infoMsg" id="infoMsg"
+                                placeholder="Write inquiry, feedback or details..."></textarea>
                         </div>
                         <button type="submit" class="btn-submit" id="sendBtn">
                             <i class="fas fa-bell"></i> Send Notification to Gmail
@@ -1057,6 +1060,31 @@ ${userMessage || "No additional message"}
         });
     </script>
 
+
+    <script>
+
+        document.getElementById('userInfoForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = {
+                name: document.getElementById('fullName').value,
+                email: document.getElementById('userEmail').value,
+                message: document.getElementById('infoMsg').value,
+            };
+
+            const response = await fetch('/api/send-email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                alert('Email sent successfully!');
+            } else {
+                alert('Failed to send email.');
+            }
+        });
+    </script>
     <!-- 
     =======================================================
     🔥 EXACT SIZE MATCHES ORIGINAL IMAGE (width ~540px, compact card, height auto similar to UI)
