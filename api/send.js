@@ -1,13 +1,47 @@
 const { Resend } = require('resend');
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+function parseJsonBody(req) {
+  const raw = req.body;
+  if (raw == null) return {};
+  if (typeof raw === 'string') {
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return {};
+    }
+  }
+  if (Buffer.isBuffer(raw)) {
+    try {
+      return JSON.parse(raw.toString('utf8'));
+    } catch {
+      return {};
+    }
+  }
+  if (typeof raw === 'object') return raw;
+  return {};
+}
 
 module.exports = async function handler(req, res) {
+  if (req.method === 'OPTIONS') {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    return res.status(204).end();
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
 
-  const body = req.body || {};
+  if (!process.env.RESEND_API_KEY) {
+    return res.status(500).json({
+      success: false,
+      error:
+        'Server misconfiguration: RESEND_API_KEY is not set. Add it in Vercel → Project → Settings → Environment Variables, then redeploy.',
+    });
+  }
+
+  const body = parseJsonBody(req);
   const fullName = (body.fullName ?? body.name ?? '').toString().trim();
   const userEmail = (body.userEmail ?? body.email ?? '').toString().trim();
   const infoMsg = (body.infoMsg ?? body.message ?? '').toString().trim();
@@ -16,10 +50,10 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ success: false, error: 'Missing fullName or infoMsg' });
   }
 
+  const resend = new Resend(process.env.RESEND_API_KEY);
+
   try {
     const data = await resend.emails.send({
-      // This sender works for testing on Resend without a verified domain.
-      // When you verify your own domain in Resend, replace with e.g. "Contact <hello@yourdomain.com>".
       from: 'Contact Form <onboarding@resend.dev>',
       to: ['rfurqan009@gmail.com'],
       subject: `New message from ${fullName}`,
@@ -35,15 +69,16 @@ module.exports = async function handler(req, res) {
 
     return res.status(200).json({ success: true, data });
   } catch (error) {
-    return res.status(500).json({ success: false, error: error?.message || 'Failed to send' });
+    const message = error?.message || String(error);
+    return res.status(500).json({ success: false, error: message });
   }
 };
 
 function escapeHtml(input) {
   return String(input)
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#039;');
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
