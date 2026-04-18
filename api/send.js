@@ -1,4 +1,4 @@
-const { Resend } = require('resend');
+const nodemailer = require('nodemailer');
 
 function parseJsonBody(req) {
   const raw = req.body;
@@ -21,6 +21,40 @@ function parseJsonBody(req) {
   return {};
 }
 
+function getTransport() {
+  const user = process.env.SMTP_USER;
+  const pass = process.env.SMTP_PASS;
+  const host = process.env.SMTP_HOST;
+  const port = process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : undefined;
+
+  if (!user || !pass) {
+    return null;
+  }
+
+  // Generic SMTP (Gmail: smtp.gmail.com, port 587, secure false)
+  if (host && port) {
+    const secure =
+      process.env.SMTP_SECURE === 'true' || port === 465;
+    return nodemailer.createTransport({
+      host,
+      port,
+      secure,
+      auth: { user, pass },
+    });
+  }
+
+  // Preset (e.g. SMTP_SERVICE=gmail)
+  const service = process.env.SMTP_SERVICE;
+  if (service) {
+    return nodemailer.createTransport({
+      service,
+      auth: { user, pass },
+    });
+  }
+
+  return null;
+}
+
 module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -33,11 +67,12 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
 
-  if (!process.env.RESEND_API_KEY) {
+  const transport = getTransport();
+  if (!transport) {
     return res.status(500).json({
       success: false,
       error:
-        'Server misconfiguration: RESEND_API_KEY is not set. Add it in Vercel → Project → Settings → Environment Variables, then redeploy.',
+        'Server misconfiguration: set SMTP_USER and SMTP_PASS, plus either SMTP_HOST+SMTP_PORT or SMTP_SERVICE (e.g. gmail). Add them in Vercel → Environment Variables, then redeploy.',
     });
   }
 
@@ -50,14 +85,16 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ success: false, error: 'Missing fullName or infoMsg' });
   }
 
-  const resend = new Resend(process.env.RESEND_API_KEY);
+  const mailTo = (process.env.MAIL_TO || 'rfurqan009@gmail.com').trim();
+  const mailFrom =
+    (process.env.MAIL_FROM || `Portfolio contact <${process.env.SMTP_USER}>`).trim();
 
   try {
-    const data = await resend.emails.send({
-      from: 'Contact Form <onboarding@resend.dev>',
-      to: ['rfurqan009@gmail.com'],
-      subject: `New message from ${fullName}`,
+    const info = await transport.sendMail({
+      from: mailFrom,
+      to: mailTo,
       replyTo: userEmail || undefined,
+      subject: `New message from ${fullName}`,
       html: `
         <h2>New contact form submission</h2>
         <p><strong>Full Name:</strong> ${escapeHtml(fullName)}</p>
@@ -67,7 +104,7 @@ module.exports = async function handler(req, res) {
       `,
     });
 
-    return res.status(200).json({ success: true, data });
+    return res.status(200).json({ success: true, messageId: info.messageId });
   } catch (error) {
     const message = error?.message || String(error);
     return res.status(500).json({ success: false, error: message });
